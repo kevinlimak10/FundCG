@@ -1,9 +1,9 @@
-/* Hello Triangle - cÛdigo adaptado de https://learnopengl.com/#!Getting-started/Hello-Triangle 
+/* Hello Triangle - c√≥digo adaptado de https://learnopengl.com/#!Getting-started/Hello-Triangle 
  *
  * Adaptado por Rossana Baptista Queiroz
- * para a disciplina de Processamento Gr·fico - Unisinos
- * Vers„o inicial: 7/4/2017
- * ⁄ltima atualizaÁ„o em 01/08/2022
+ * para a disciplina de Processamento Gr√°fico - Unisinos
+ * Vers√£o inicial: 7/4/2017
+ * √öltima atualiza√ß√£o em 01/08/2022
  *
  */
 
@@ -23,28 +23,28 @@ using namespace std;
 #include <GLFW/glfw3.h>
 
 
-// ProtÛtipo da funÁ„o de callback de teclado
+// Prot√≥tipo da fun√ß√£o de callback de teclado
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
-int criarCirculo(float radius, int numeroPontos);
+int criarPentagono(float radius, int nPoints);
 
-// ProtÛtipos das funÁıes
+// Prot√≥tipos das fun√ß√µes
 int setupShader();
 int setupGeometry();
 
-// Dimensıes da janela (pode ser alterado em tempo de execuÁ„o)
+// Dimens√µes da janela (pode ser alterado em tempo de execu√ß√£o)
 const GLuint WIDTH = 800, HEIGHT = 600;
 
-// CÛdigo fonte do Vertex Shader (em GLSL): ainda hardcoded
+// C√≥digo fonte do Vertex Shader (em GLSL): ainda hardcoded
 const GLchar* vertexShaderSource = "#version 450\n"
 "layout (location = 0) in vec3 position;\n"
 "void main()\n"
 "{\n"
-//...pode ter mais linhas de cÛdigo aqui!
+//...pode ter mais linhas de c√≥digo aqui!
 "gl_Position = vec4(position.x, position.y, position.z, 1.0);\n"
 "}\0";
 
-//CÛdifo fonte do Fragment Shader (em GLSL): ainda hardcoded
+//C√≥difo fonte do Fragment Shader (em GLSL): ainda hardcoded
 const GLchar* fragmentShaderSource = "#version 450\n"
 "uniform vec4 inputColor;\n"
 "out vec4 color;\n"
@@ -53,15 +53,15 @@ const GLchar* fragmentShaderSource = "#version 450\n"
 "color = inputColor;\n"
 "}\n\0";
 
-// FunÁ„o MAIN
+// Fun√ß√£o MAIN
 int main()
 {
-	// InicializaÁ„o da GLFW
+	// Inicializa√ß√£o da GLFW
 	glfwInit();
 
-	//Muita atenÁ„o aqui: alguns ambientes n„o aceitam essas configuraÁıes
-	//VocÍ deve adaptar para a vers„o do OpenGL suportada por sua placa
-	//Sugest„o: comente essas linhas de cÛdigo para desobrir a vers„o e
+	//Muita aten√ß√£o aqui: alguns ambientes n√£o aceitam essas configura√ß√µes
+	//Voc√™ deve adaptar para a vers√£o do OpenGL suportada por sua placa
+	//Sugest√£o: comente essas linhas de c√≥digo para desobrir a vers√£o e
 	//depois atualize (por exemplo: 4.5 com 4 e 5)
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -72,27 +72,27 @@ int main()
 //	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 //#endif
 
-	// CriaÁ„o da janela GLFW
+	// Cria√ß√£o da janela GLFW
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Ola Triangulo - Kevin Lima!", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 
-	// Fazendo o registro da funÁ„o de callback para a janela GLFW
+	// Fazendo o registro da fun√ß√£o de callback para a janela GLFW
 	glfwSetKeyCallback(window, key_callback);
 
-	// GLAD: carrega todos os ponteiros d funÁıes da OpenGL
+	// GLAD: carrega todos os ponteiros d fun√ß√µes da OpenGL
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
 
 	}
 
-	// Obtendo as informaÁıes de vers„o
+	// Obtendo as informa√ß√µes de vers√£o
 	const GLubyte* renderer = glGetString(GL_RENDERER); /* get renderer string */
 	const GLubyte* version = glGetString(GL_VERSION); /* version as a string */
 	cout << "Renderer: " << renderer << endl;
 	cout << "OpenGL version supported " << version << endl;
 
-	// Definindo as dimensıes da viewport com as mesmas dimensıes da janela da aplicaÁ„o
+	// Definindo as dimens√µes da viewport com as mesmas dimens√µes da janela da aplica√ß√£o
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
@@ -101,24 +101,26 @@ int main()
 	// Compilando e buildando o programa de shader
 	GLuint shaderID = setupShader();
 
-	int nPoints = 20;
-	float radius = 0.5;
-	GLuint VAO = criarCirculo(radius, nPoints);
+
+	int totalPontos = 8;
+	double radius = 0.5;
+	// Gerando um buffer simples, com a geometria de um tri√¢ngulo
+	GLuint VAO = criarPentagono(radius,totalPontos);
 	
 
 	// Enviando a cor desejada (vec4) para o fragment shader
-	// Utilizamos a vari·veis do tipo uniform em GLSL para armazenar esse tipo de info
-	// que n„o est· nos buffers
+	// Utilizamos a vari√°veis do tipo uniform em GLSL para armazenar esse tipo de info
+	// que n√£o est√° nos buffers
 	GLint colorLoc = glGetUniformLocation(shaderID, "inputColor");
 	assert(colorLoc > -1);
 	
 	glUseProgram(shaderID);
 	
 
-	// Loop da aplicaÁ„o - "game loop"
+	// Loop da aplica√ß√£o - "game loop"
 	while (!glfwWindowShouldClose(window))
 	{
-		// Checa se houveram eventos de input (key pressed, mouse moved etc.) e chama as funÁıes de callback correspondentes
+		// Checa se houveram eventos de input (key pressed, mouse moved etc.) e chama as fun√ß√µes de callback correspondentes
 		glfwPollEvents();
 
 		// Limpa o buffer de cor
@@ -130,18 +132,21 @@ int main()
 
 		// Chamada de desenho - drawcall
 		// Poligono Preenchido - GL_TRIANGLES
-		glUniform4f(colorLoc, 0.0f, 0.0f, 1.0f, 1.0f); //enviando cor para vari·vel uniform inputColor
+		glUniform4f(colorLoc, 0.0f, 0.0f, 1.0f, 1.0f); //enviando cor para vari√°vel uniform inputColor
 		glBindVertexArray(VAO);
-		//glDrawArrays(GL_TRIANGLE_FAN, 0, nPoints + 2);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, totalPontos + 2);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, totalPontos);
 
 		// Chamada de desenho - drawcall
 		// CONTORNO - GL_LINE_LOOP
 		// PONTOS - GL_POINTS
-		glUniform4f(colorLoc, 1.0f, 1.0f, 1.0f, 1.0f); //enviando cor para vari·vel uniform inputColor
-		glDrawArrays(GL_LINE_LOOP, 1, nPoints + 1);
+		glUniform4f(colorLoc, 1.0f, 1.0f, 1.0f, 1.0f); //enviando cor para vari√°vel uniform inputColor
+		glDrawArrays(GL_LINE_LOOP, 1, totalPontos + 1);
+		glDrawArrays(GL_LINE_LOOP, 1, totalPontos + 1);
 
-		glUniform4f(colorLoc, 0.0f, 0.0f, 0.0f, 0.0f); //enviando cor para vari·vel uniform inputColor
-		glDrawArrays(GL_POINTS, 0, nPoints + 1);
+		glUniform4f(colorLoc, 0.0f, 0.0f, 0.0f, 0.0f); //enviando cor para vari√°vel uniform inputColor
+		glDrawArrays(GL_POINTS, 0, totalPontos + 1);
+		glDrawArrays(GL_POINTS, 0, totalPontos + 1);
 
 
 
@@ -152,14 +157,13 @@ int main()
 	}
 	// Pede pra OpenGL desalocar os buffers
 	glDeleteVertexArrays(1, &VAO);
-	// Finaliza a execuÁ„o da GLFW, limpando os recursos alocados por ela
+	// Finaliza a execu√ß√£o da GLFW, limpando os recursos alocados por ela
 	glfwTerminate();
 	return 0;
 }
 
-int criarCirculo(float radius, int nPoints)
+int criarPentagono(float radius, int nPoints)
 {
-
 	int totalSize = (nPoints + 2) * 3;
 
 	float* vertices = new float[totalSize];
@@ -170,13 +174,11 @@ int criarCirculo(float radius, int nPoints)
 	vertices[2] = 0.0;
 
 	float angle = 0.0;
-	float slice = 2 * PI / ((float)nPoints/3);
-
-	float increment = .08;
+	float slice = 2 * PI / (float)nPoints;
 
 	for (int i = 3; i < totalSize; i += 3) {
-		float x = radius * cos(angle)* increment;
-		float y = radius * sin(angle)* increment;
+		float x = radius * cos(angle);
+		float y = radius * sin(angle);
 		float z = 0.0;
 
 		vertices[i] = x;
@@ -185,47 +187,60 @@ int criarCirculo(float radius, int nPoints)
 
 		angle += slice;
 
-		increment += .08;
+	}
+
+	for (int i = 6; i < totalSize; i += 3) {
+		float x = radius * cos(angle);
+		float y = radius * sin(angle);
+		float z = 0.0;
+
+		vertices[i] = x;
+		vertices[i + 1] = y;
+		vertices[i + 2] = z;
+
+		angle += slice;
 
 	}
 
 
+
 	GLuint VBO, VAO;
 
-	//GeraÁ„o do identificador do VBO
+	//Gera√ß√£o do identificador do VBO
 	glGenBuffers(1, &VBO);
-	//Faz a conex„o (vincula) do buffer como um buffer de array
+	//Faz a conex√£o (vincula) do buffer como um buffer de array
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	//Envia os dados do array de floats para o buffer da OpenGl
 	glBufferData(GL_ARRAY_BUFFER, totalSize * sizeof(float), vertices, GL_STATIC_DRAW);
 
-	//GeraÁ„o do identificador do VAO (Vertex Array Object)
+	//Gera√ß√£o do identificador do VAO (Vertex Array Object)
 	glGenVertexArrays(1, &VAO);
-	// Vincula (bind) o VAO primeiro, e em seguida  conecta e seta o(s) buffer(s) de vÈrtices
+	// Vincula (bind) o VAO primeiro, e em seguida  conecta e seta o(s) buffer(s) de v√©rtices
 	// e os ponteiros para os atributos 
 	glBindVertexArray(VAO);
 	//Para cada atributo do vertice, criamos um "AttribPointer" (ponteiro para o atributo), indicando: 
-	// LocalizaÁ„o no shader * (a localizaÁ„o dos atributos devem ser correspondentes no layout especificado no vertex shader)
+	// Localiza√ß√£o no shader * (a localiza√ß√£o dos atributos devem ser correspondentes no layout especificado no vertex shader)
 	// Numero de valores que o atributo tem (por ex, 3 coordenadas xyz) 
 	// Tipo do dado
-	// Se est· normalizado (entre zero e um)
+	// Se est√° normalizado (entre zero e um)
 	// Tamanho em bytes 
 	// Deslocamento a partir do byte zero 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 6, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
-	// Observe que isso È permitido, a chamada para glVertexAttribPointer registrou o VBO como o objeto de buffer de vÈrtice 
-	// atualmente vinculado - para que depois possamos desvincular com seguranÁa
+	// Observe que isso √© permitido, a chamada para glVertexAttribPointer registrou o VBO como o objeto de buffer de v√©rtice 
+	// atualmente vinculado - para que depois possamos desvincular com seguran√ßa
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	// Desvincula o VAO (È uma boa pr·tica desvincular qualquer buffer ou array para evitar bugs medonhos)
+	// Desvincula o VAO (√© uma boa pr√°tica desvincular qualquer buffer ou array para evitar bugs medonhos)
 	glBindVertexArray(0);
 
 	return VAO;
 }
 
-// FunÁ„o de callback de teclado - sÛ pode ter uma inst‚ncia (deve ser est·tica se
-// estiver dentro de uma classe) - … chamada sempre que uma tecla for pressionada
+// Fun√ß√£o de callback de teclado - s√≥ pode ter uma inst√¢ncia (deve ser est√°tica se
+// estiver dentro de uma classe) - √â chamada sempre que uma tecla for pressionada
 // ou solta via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
@@ -233,18 +248,18 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
-//Esta funÁ„o est· basntante hardcoded - objetivo È compilar e "buildar" um programa de
-// shader simples e ˙nico neste exemplo de cÛdigo
-// O cÛdigo fonte do vertex e fragment shader est· nos arrays vertexShaderSource e
-// fragmentShader source no iniÁio deste arquivo
-// A funÁ„o retorna o identificador do programa de shader
+//Esta fun√ß√£o est√° basntante hardcoded - objetivo √© compilar e "buildar" um programa de
+// shader simples e √∫nico neste exemplo de c√≥digo
+// O c√≥digo fonte do vertex e fragment shader est√° nos arrays vertexShaderSource e
+// fragmentShader source no ini√ßio deste arquivo
+// A fun√ß√£o retorna o identificador do programa de shader
 int setupShader()
 {
 	// Vertex shader
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
 	glCompileShader(vertexShader);
-	// Checando erros de compilaÁ„o (exibiÁ„o via log no terminal)
+	// Checando erros de compila√ß√£o (exibi√ß√£o via log no terminal)
 	GLint success;
 	GLchar infoLog[512];
 	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
@@ -257,7 +272,7 @@ int setupShader()
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
 	glCompileShader(fragmentShader);
-	// Checando erros de compilaÁ„o (exibiÁ„o via log no terminal)
+	// Checando erros de compila√ß√£o (exibi√ß√£o via log no terminal)
 	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{

@@ -1,2 +1,5 @@
 ﻿  Source.cpp
+D:\Faculdade\computacaoGrafica\FundCG\HelloTriangle\HelloTriangle\Source.cpp(173,14): warning C4244: 'inicializando': conversão de 'double' para 'float', possível perda de dados
+D:\Faculdade\computacaoGrafica\FundCG\HelloTriangle\HelloTriangle\Source.cpp(175,23): warning C4305: 'inicializando': truncamento de 'double' para 'float'
+D:\Faculdade\computacaoGrafica\FundCG\HelloTriangle\HelloTriangle\Source.cpp(188,19): warning C4305: '+=': truncamento de 'double' para 'float'
   HelloTriangle.vcxproj -> D:\Faculdade\computacaoGrafica\FundCG\HelloTriangle\Debug\HelloTriangle.exe

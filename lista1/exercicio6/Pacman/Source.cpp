@@ -1,4 +1,4 @@
-/* Hello Triangle - código adaptado de https://learnopengl.com/#!Getting-started/Hello-Triangle 
+/* Hello Triangle - código adaptado de https://learnopengl.com/#!Getting-started/Hello-Triangle
  *
  * Adaptado por Rossana Baptista Queiroz
  * para a disciplina de Processamento Gráfico - Unisinos
@@ -26,7 +26,7 @@ using namespace std;
 // Protótipo da função de callback de teclado
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
-int criarCirculo(float radius, int numeroPontos);
+int criarPentagono(float radius, int numeroPontos);
 
 // Protótipos das funções
 int setupShader();
@@ -101,19 +101,20 @@ int main()
 	// Compilando e buildando o programa de shader
 	GLuint shaderID = setupShader();
 
-	int nPoints = 20;
+
+	int numeroPontos = 20;
 	float radius = 0.5;
-	GLuint VAO = criarCirculo(radius, nPoints);
-	
+	GLuint VAO = criarPentagono(radius, numeroPontos);
+
 
 	// Enviando a cor desejada (vec4) para o fragment shader
 	// Utilizamos a variáveis do tipo uniform em GLSL para armazenar esse tipo de info
 	// que não está nos buffers
 	GLint colorLoc = glGetUniformLocation(shaderID, "inputColor");
 	assert(colorLoc > -1);
-	
+
 	glUseProgram(shaderID);
-	
+
 
 	// Loop da aplicação - "game loop"
 	while (!glfwWindowShouldClose(window))
@@ -132,16 +133,19 @@ int main()
 		// Poligono Preenchido - GL_TRIANGLES
 		glUniform4f(colorLoc, 0.0f, 0.0f, 1.0f, 1.0f); //enviando cor para variável uniform inputColor
 		glBindVertexArray(VAO);
-		//glDrawArrays(GL_TRIANGLE_FAN, 0, nPoints + 2);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, numeroPontos + 2);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, numeroPontos);
 
 		// Chamada de desenho - drawcall
 		// CONTORNO - GL_LINE_LOOP
 		// PONTOS - GL_POINTS
 		glUniform4f(colorLoc, 1.0f, 1.0f, 1.0f, 1.0f); //enviando cor para variável uniform inputColor
-		glDrawArrays(GL_LINE_LOOP, 1, nPoints + 1);
+		glDrawArrays(GL_LINE_LOOP, 1, numeroPontos + 1);
+		glDrawArrays(GL_LINE_LOOP, 1, numeroPontos + 1);
 
 		glUniform4f(colorLoc, 0.0f, 0.0f, 0.0f, 0.0f); //enviando cor para variável uniform inputColor
-		glDrawArrays(GL_POINTS, 0, nPoints + 1);
+		glDrawArrays(GL_POINTS, 0, numeroPontos + 1);
+		glDrawArrays(GL_POINTS, 0, numeroPontos + 1);
 
 
 
@@ -157,10 +161,9 @@ int main()
 	return 0;
 }
 
-int criarCirculo(float radius, int nPoints)
+int criarPentagono(float radius, int numeroPontos)
 {
-
-	int totalSize = (nPoints + 2) * 3;
+	int totalSize = (numeroPontos + 1) * 3;
 
 	float* vertices = new float[totalSize];
 
@@ -170,13 +173,11 @@ int criarCirculo(float radius, int nPoints)
 	vertices[2] = 0.0;
 
 	float angle = 0.0;
-	float slice = 2 * PI / ((float)nPoints/3);
-
-	float increment = .08;
+	float slice = 2 * PI / (float)numeroPontos;
 
 	for (int i = 3; i < totalSize; i += 3) {
-		float x = radius * cos(angle)* increment;
-		float y = radius * sin(angle)* increment;
+		float x = radius * cos(angle);
+		float y = radius * sin(angle);
 		float z = 0.0;
 
 		vertices[i] = x;
@@ -184,8 +185,6 @@ int criarCirculo(float radius, int nPoints)
 		vertices[i + 2] = z;
 
 		angle += slice;
-
-		increment += .08;
 
 	}
 
@@ -212,6 +211,7 @@ int criarCirculo(float radius, int nPoints)
 	// Tamanho em bytes 
 	// Deslocamento a partir do byte zero 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 6, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
 	// Observe que isso é permitido, a chamada para glVertexAttribPointer registrou o VBO como o objeto de buffer de vértice 
