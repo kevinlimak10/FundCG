@@ -17,7 +17,9 @@ Z-depth, Alpha value)
 As primitivas são os elementos gráficos mais simples que podem ser criados dentro de uma
 aplicação. Armazenamos através dos VBOs(Vertex Buffer Objects) que são array de dados,
 geralmente float e servem para enviar dados dos vértices a GPU como posição, vetores
-normais , cores e etc.## 3. Explique o que é VBO, VAO e EBO, e como se relacionam (se achar mais fácil, pode fazer um gráfico representando a relação entre eles).
+normais , cores e etc.
+
+## 3. Explique o que é VBO, VAO e EBO, e como se relacionam (se achar mais fácil, pode fazer um gráfico representando a relação entre eles).
 
 VBO: Armazena os vértices
 VAO: Armazena atributos pertinente a um vértice
