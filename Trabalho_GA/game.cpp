@@ -56,7 +56,7 @@ void Game::Init()
 
 void Game::Update(float dt)
 {
-    //Move a bola
+    //Move a obstaculo
     Obstacle->Move(dt, this->Width);
     //Checagem de colisoes.
     this->DoCollisions();
@@ -151,7 +151,7 @@ void Game::Render()
 
 void Game::ResetPlayer()
 {
-    // Reseta o player, bola e numero de colisoes.
+    // Reseta o player, obstaculo e numero de colisoes.
     Player->Size = PLAYER_SIZE;
     Player->Position = glm::vec2(10.0f, this->Height / 2.0f);
     glm::vec2 ballPos = glm::vec2(this->Width - (2.0f * ICE_RADIUS), this->Height / 2.0f);
