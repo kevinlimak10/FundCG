@@ -35,14 +35,20 @@ while True:
 
     img_h1 = cv.hconcat([previews[0],previews[3],previews[4]])
     img_h2 = cv.hconcat([previews[1],previews[2],previews[5]])
-    # img_final = cv.hconcat([img_h1,img_h2])
+    img_preview = cv.hconcat([img_h1,img_h2])
+
+    #get final size
+    frame = cv.resize(frame,((len(previews) * 240), 680))
+
+    img_final = cv.vconcat([img_preview,frame])
+    cv.resize(frame, (240, 160))
 
     if record:
         writer.write(frame)
         cv.putText(frame, 'Press Space to stop Record', (0, 130), 4, 1, (200, 255, 155))
     else:
         cv.putText(frame, 'Press R to Start Record or Q to exit', (0, 130), 4, 1, (200, 255, 155))
-    cv.imshow("Stories", img_h1)
+    cv.imshow("Stories", img_final)
 
     key = cv.waitKey(1)
     if key == ord('r') and not record:

@@ -10,7 +10,7 @@ def brilho(img, beta_value ):
 def grayscale(image):
     converted_image = np.array(image)
     gray_image = cv.cvtColor(converted_image, cv.COLOR_RGB2GRAY)
-    return gray_image
+    return tranformToColorImage(gray_image)
 
 def sketch(image):
     converted_image = np.array(image)
@@ -18,7 +18,7 @@ def sketch(image):
     inv_gray_image = 255 - gray_image
     blur_image = cv.GaussianBlur(inv_gray_image, (21, 21), 0, 0)
     sketch_image = cv.divide(gray_image, 255 - blur_image, scale=256)
-    return sketch_image
+    return tranformToColorImage(sketch_image)
 
 
 def sepia(image):
@@ -48,14 +48,13 @@ def canny(image):
     converted_image = cv.cvtColor(converted_image, cv.COLOR_RGB2BGR)
     blur_image = cv.GaussianBlur(converted_image, (11, 11), 0)
     canny_image = cv.Canny(blur_image, threshold1, threshold2)
-    return canny_image
+    return tranformToColorImage(canny_image)
 
 
 def original(image):
     return image
 
 
-def tranformTo3d(img):
-    data = array(img)
-    data = data.reshape((data, data, 1))
-    return data
+def tranformToColorImage(img):
+    image_color = cv.cvtColor(img, cv.COLOR_GRAY2RGB)
+    return image_color
