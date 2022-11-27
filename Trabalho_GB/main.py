@@ -2,6 +2,9 @@ import cv2 as cv
 import numpy as np
 from filter import grayscale, original, sketch, sepia, blur, canny
 from sticker import *
+from imageDirectoryControl import *
+
+imagesList = readFiles()
 
 video = cv.VideoCapture(0)
 
@@ -26,6 +29,7 @@ def selectSticker(*args):
     handleStickerIndex(args[0], canvas)
 
 cv.createTrackbar('Sticker', "stickers", 0, len(stickersList) - 1, selectSticker)
+cv.createTrackbar('Imagem', "stories", 0, len(imagesList) - 1, handleChangeActiveImage)
 
 def onMouse(event, x, y, flags, param):
     global posList
@@ -60,6 +64,8 @@ while True:
     frameToPreFilter = cv.resize(frame, (widthHeader, sizeHeader))
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
+    if(getActiveDirImage() != 0):
+        frame = imagesList[getActiveDirImage()]
     frame = printStickers(frame)
 
     # cv.imshow("stories", frame)
@@ -97,6 +103,8 @@ while True:
     key = cv.waitKey(1)
     if key == ord('q'):
         break
+    if key == ord('c'):
+        clearAllStickers()
 
 
     if key in [ord(k) for k in filters.keys()]:

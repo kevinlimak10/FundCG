@@ -65,3 +65,7 @@ def putSticker(event, x, y, flags, param):
 
 def getStickerIndex():
     return stickerIndex
+
+def clearAllStickers():
+    global stickers
+    stickers = []
