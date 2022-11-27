@@ -6,6 +6,7 @@ class StickerModel:
         self.scale = scale
 
 stickersList = [
+    None,
     StickerModel(cv.imread("stickers/nadaverirmao.png", cv.IMREAD_UNCHANGED), "Nada ver irmão", 25),
     StickerModel(cv.imread("stickers/mopaz.png", cv.IMREAD_UNCHANGED), "Mopaz", 15),
     StickerModel(cv.imread("stickers/loadingcat.png", cv.IMREAD_UNCHANGED), "Loading cat", 15),

@@ -16,13 +16,27 @@ record = False
 posList = []
 
 initialImg = cv.imread('stickers/mopaz.png')
-cv.imshow("smile meter", initialImg)
-cv.createTrackbar('Sticker', "smile meter", 0, len(stickersList), handleStickerIndex)
+cv.imshow("stories", initialImg)
+
+canvas = np.zeros((200,800,3), np.uint8)
+
+cv.putText(canvas, 'Nenhum sticker selecionado', (20, 20), 2, 1, (200, 255, 155))
+cv.imshow("stickers", canvas)
+def selectSticker(*args):
+    handleStickerIndex(args[0], canvas)
+
+cv.createTrackbar('Sticker', "stickers", 0, len(stickersList) - 1, selectSticker)
 
 def onMouse(event, x, y, flags, param):
     global posList
     if event == cv.EVENT_LBUTTONDOWN:
         posList.append((x, y))
+
+def mouseCallback(event, x, y, flags, param):
+    if getStickerIndex() != 0:
+        putSticker(event, x, y, flags, param)
+    else:
+        onMouse(event, x, y, flags, param)
 
 def checkChangeFilter(x,y):
     return
@@ -39,6 +53,8 @@ filters = {
 
 widthHeader = int(width / len(filters))
 selected_filter = '0'
+cv.setMouseCallback('stories', mouseCallback)
+
 while True:
     check, frame = video.read()
     frameToPreFilter = cv.resize(frame, (widthHeader, sizeHeader))
@@ -46,9 +62,7 @@ while True:
 
     frame = printStickers(frame)
 
-    cv.imshow("smile meter", frame)
-    cv.setMouseCallback('smile meter', mouseCallback)
-
+    # cv.imshow("stories", frame)
     filter = filters.get(selected_filter)
     if filter is not None:
         frame = filter(frame)
@@ -78,23 +92,12 @@ while True:
             selected_filter = str(int(x/widthHeader))
         posList = []
 
-    if record:
-        writer.write(frame)
-        cv.putText(frame, 'Press Space to stop Record', (0, 130), 4, 1, (200, 255, 155))
-    else:
-        cv.putText(frame, 'Press R to Start Record or Q to exit', (0, 130), 4, 1, (200, 255, 155))
     cv.imshow("stories", img_final)
-    cv.setMouseCallback('stories', onMouse)
-
 
     key = cv.waitKey(1)
-    if key == ord('r') and not record:
-        record = True
-    if key == ord(' ') and record:
-        record = False
-        writer.release()
     if key == ord('q'):
         break
+
 
     if key in [ord(k) for k in filters.keys()]:
         selected_filter = chr(key)
