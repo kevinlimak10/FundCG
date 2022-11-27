@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy as np
 from filter import grayscale, original, sketch, sepia, blur, canny
+from sticker import *
 
 video = cv.VideoCapture(0)
 
@@ -14,6 +15,9 @@ record = False
 
 posList = []
 
+initialImg = cv.imread('stickers/mopaz.png')
+cv.imshow("smile meter", initialImg)
+cv.createTrackbar('Sticker', "smile meter", 0, len(stickersList), handleStickerIndex)
 
 def onMouse(event, x, y, flags, param):
     global posList
@@ -38,6 +42,12 @@ selected_filter = '0'
 while True:
     check, frame = video.read()
     frameToPreFilter = cv.resize(frame, (widthHeader, sizeHeader))
+    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+
+    frame = printStickers(frame)
+
+    cv.imshow("smile meter", frame)
+    cv.setMouseCallback('smile meter', mouseCallback)
 
     filter = filters.get(selected_filter)
     if filter is not None:
