@@ -4,6 +4,7 @@ from filter import grayscale, original, sketch, sepia, blur, canny
 from sticker import *
 from imageDirectoryControl import *
 from eyesDetection import *
+from datetime import datetime
 imagesList = readFiles()
 
 video = cv.VideoCapture(0)
@@ -91,8 +92,6 @@ while True:
 
     img_final = cv.vconcat([img_preview, frame])
 
-    # cv.resize(frame, (240, 160))
-
     if len(posList) > 0:
         x,y = posList[0]
         if y > 0 and x > 0 and y <= sizeHeader and x <= width:
@@ -106,7 +105,11 @@ while True:
         break
     if key == ord('c'):
         clearAllStickers()
-
+    if key == ord('p'):
+        #generate random file name
+        now = datetime.now()
+        dt_string = now.strftime("%d-%m-%Y_%H-%M-%S")
+        cv.imwrite(dt_string + '.jpg', img_final)
 
     if key in [ord(k) for k in filters.keys()]:
         selected_filter = chr(key)

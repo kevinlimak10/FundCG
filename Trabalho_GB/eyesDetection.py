@@ -18,9 +18,12 @@ def detectEye (gray, frame, isLeft):
     imgW = (w * 3 / 100)
 
     for (x,y,w,h) in eye:
+        x=x+30
+        y=y+30
+
         roi = frame[y:y+h, x:x+w]
 
-        sticker = Sticker(x, y, cv.cvtColor(img, cv.COLOR_BGR2BGRA),4)
+        sticker = Sticker(x, y, cv.cvtColor(img, cv.COLOR_BGR2BGRA),7)
         frame = formatSticker(frame, sticker.image, int((x - sticker.image.shape[0] / 2)),
                               int((y - sticker.image.shape[1] / 2)))
     return frame
