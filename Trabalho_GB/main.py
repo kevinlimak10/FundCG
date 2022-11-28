@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy as np
 from filter import grayscale, original, sketch, sepia, blur, canny
+from gestureSticker import detectMotion
 from sticker import *
 from imageDirectoryControl import *
 from eyesDetection import *
@@ -19,19 +20,25 @@ record = False
 
 posList = []
 
+toggleEyes = False
 
-canvas = np.zeros((200,800,3), np.uint8)
+activeGestureStickers = False
+
+canvas = np.zeros((200,1000,3), np.uint8)
 
 cv.imshow("stories", canvas)
 
 
 cv.putText(canvas, 'Nenhum sticker selecionado', (20, 20), 2, 1, (200, 255, 155))
+cv.putText(canvas, 'Clique em E para ativar/desativar filtro de olhos', (20, 60), 2, 1, (200, 255, 155))
+cv.putText(canvas, 'Clique em P para tirar uma foto', (20, 100), 2, 1, (200, 255, 155))
+cv.putText(canvas, 'Clique em G para ativar modo de gestos', (20, 140), 2, 1, (200, 255, 155))
 cv.imshow("stickers", canvas)
 def selectSticker(*args):
     handleStickerIndex(args[0], canvas)
 
 cv.createTrackbar('Sticker', "stickers", 0, len(stickersList) - 1, selectSticker)
-cv.createTrackbar('Imagem', "stories", 0, len(imagesList) - 1, handleChangeActiveImage)
+cv.createTrackbar('Imagem', "stickers", 0, len(imagesList) - 1, handleChangeActiveImage)
 
 def onMouse(event, x, y, flags, param):
     global posList
@@ -65,11 +72,17 @@ while True:
     check, frame = video.read()
     frameToPreFilter = cv.resize(frame, (widthHeader, sizeHeader))
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-    frame = detectEye(gray, frame, True)
-    frame = detectEye(gray, frame, False)
+
+    if toggleEyes:
+        frame = detectEye(gray, frame, True)
+        frame = detectEye(gray, frame, False)
+
+    if activeGestureStickers:
+        frame = detectMotion(frame)
 
     if(getActiveDirImage() != 0):
         frame = imagesList[getActiveDirImage()]
+        frameToPreFilter = cv.resize(frame, (widthHeader, sizeHeader))
     frame = printStickers(frame)
 
     filter = filters.get(selected_filter)
@@ -106,10 +119,13 @@ while True:
     if key == ord('c'):
         clearAllStickers()
     if key == ord('p'):
-        #generate random file name
         now = datetime.now()
         dt_string = now.strftime("%d-%m-%Y_%H-%M-%S")
         cv.imwrite(dt_string + '.jpg', img_final)
+    if key == ord('e'):
+        toggleEyes = not toggleEyes
+    if key == ord('g'):
+        activeGestureStickers = not activeGestureStickers
 
     if key in [ord(k) for k in filters.keys()]:
         selected_filter = chr(key)
