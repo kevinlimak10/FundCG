@@ -7,11 +7,10 @@ class StickerModel:
 
 stickersList = [
     None,
-    StickerModel(cv.imread("stickers/nadaverirmao.png", cv.IMREAD_UNCHANGED), "Nada ver irmão", 25),
-    StickerModel(cv.imread("stickers/mopaz.png", cv.IMREAD_UNCHANGED), "Mopaz", 15),
-    StickerModel(cv.imread("stickers/loadingcat.png", cv.IMREAD_UNCHANGED), "Loading cat", 15),
-    StickerModel(cv.imread("stickers/azideia.png", cv.IMREAD_UNCHANGED), "Azi ideia", 20),
-    StickerModel(cv.imread("stickers/coreana.png", cv.IMREAD_UNCHANGED), "Coreana", 20),
-    StickerModel(cv.imread("stickers/pigmeu.png", cv.IMREAD_UNCHANGED), "Pigmeu", 20),
-    StickerModel(cv.imread("stickers/queloucura.png", cv.IMREAD_UNCHANGED), "Que loucura", 20),
+    StickerModel(cv.imread("stickers/anya.png", cv.IMREAD_UNCHANGED), "Anya + Barba branca", 10),
+    StickerModel(cv.imread("stickers/darwin.png", cv.IMREAD_UNCHANGED), "Darwin", 15),
+    StickerModel(cv.imread("stickers/homer.png", cv.IMREAD_UNCHANGED), "Homer", 15),
+    StickerModel(cv.imread("stickers/ladopositivo.png", cv.IMREAD_UNCHANGED), "O lado positivo", 15),
+    StickerModel(cv.imread("stickers/macaquinho.png", cv.IMREAD_UNCHANGED), "Macaquinho", 25),
+    StickerModel(cv.imread("stickers/vergonha.png", cv.IMREAD_UNCHANGED), "Vergonha", 25),
 ]

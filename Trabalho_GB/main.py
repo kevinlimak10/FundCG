@@ -3,7 +3,7 @@ import numpy as np
 from filter import grayscale, original, sketch, sepia, blur, canny
 from sticker import *
 from imageDirectoryControl import *
-
+from eyesDetection import *
 imagesList = readFiles()
 
 video = cv.VideoCapture(0)
@@ -18,10 +18,11 @@ record = False
 
 posList = []
 
-initialImg = cv.imread('stickers/mopaz.png')
-cv.imshow("stories", initialImg)
 
 canvas = np.zeros((200,800,3), np.uint8)
+
+cv.imshow("stories", canvas)
+
 
 cv.putText(canvas, 'Nenhum sticker selecionado', (20, 20), 2, 1, (200, 255, 155))
 cv.imshow("stickers", canvas)
@@ -63,12 +64,13 @@ while True:
     check, frame = video.read()
     frameToPreFilter = cv.resize(frame, (widthHeader, sizeHeader))
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+    frame = detectEye(gray, frame, True)
+    frame = detectEye(gray, frame, False)
 
     if(getActiveDirImage() != 0):
         frame = imagesList[getActiveDirImage()]
     frame = printStickers(frame)
 
-    # cv.imshow("stories", frame)
     filter = filters.get(selected_filter)
     if filter is not None:
         frame = filter(frame)
@@ -88,7 +90,6 @@ while True:
     frame = cv.resize(frame, (width, height - sizeHeader))
 
     img_final = cv.vconcat([img_preview, frame])
-
 
     # cv.resize(frame, (240, 160))
 

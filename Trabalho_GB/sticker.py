@@ -19,7 +19,7 @@ stickerIndex = 0
 def createAlphaMask (alpha_channel):
     return np.dstack((alpha_channel, alpha_channel, alpha_channel))
 
-def stickerTransparent(background, sticker, x_offset, y_offset):
+def formatSticker(background, sticker, x_offset, y_offset):
     bg_h, bg_w, bg_channels = background.shape
     fg_h, fg_w, fg_channels = sticker.shape
 
@@ -53,8 +53,8 @@ def handleStickerIndex(index, windowStickers):
     cv.imshow('stickers', canvas)
 def printStickers(frame):
     for sticker in stickers:
-        frame = stickerTransparent(frame, sticker.image, int((sticker.x - sticker.image.shape[0] / 2)),
-                                 int((sticker.y - sticker.image.shape[1] / 2)))
+        frame = formatSticker(frame, sticker.image, int((sticker.x - sticker.image.shape[0] / 2)),
+                              int((sticker.y - sticker.image.shape[1] / 2)))
     return frame
 
 def putSticker(event, x, y, flags, param):
