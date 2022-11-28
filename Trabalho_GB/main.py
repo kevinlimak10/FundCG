@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy as np
-from filter import grayscale, original, sketch, sepia, blur, canny
+
+from filter import grayscale, original, sketch, sepia, blur, canny, summer, winter, lapis, negative
 from gestureSticker import detectMotion
 from sticker import *
 from imageDirectoryControl import *
@@ -37,8 +38,10 @@ cv.imshow("stickers", canvas)
 def selectSticker(*args):
     handleStickerIndex(args[0], canvas)
 
+
 cv.createTrackbar('Sticker', "stickers", 0, len(stickersList) - 1, selectSticker)
 cv.createTrackbar('Imagem', "stickers", 0, len(imagesList) - 1, handleChangeActiveImage)
+
 
 def onMouse(event, x, y, flags, param):
     global posList
@@ -54,6 +57,10 @@ def mouseCallback(event, x, y, flags, param):
 def checkChangeFilter(x,y):
     return
 
+def videoCallback(*args):
+    pass
+def fotoCallback(*args):
+    pass
 
 filters = {
     '0': original,
@@ -61,7 +68,11 @@ filters = {
     '2': sketch,
     '3': sepia,
     '4': blur,
-    '5': canny
+    '5': canny,
+    '6': summer,
+    '7': winter,
+    '8': lapis,
+    '9': negative
 }
 
 widthHeader = int(width / len(filters))
@@ -94,9 +105,13 @@ while True:
                 sketch(frameToPreFilter),
                 sepia(frameToPreFilter),
                 blur(frameToPreFilter),
-                canny(frameToPreFilter)]
+                canny(frameToPreFilter),
+                summer(frameToPreFilter),
+                winter(frameToPreFilter),
+                lapis(frameToPreFilter),
+                negative(frameToPreFilter)]
 
-    img_preview = cv.hconcat([previews[0], previews[1], previews[2], previews[3], previews[4], previews[5]])
+    img_preview = cv.hconcat(previews)
 
     # resize to original size
     img_preview = cv.resize(img_preview, (width, sizeHeader))
@@ -104,6 +119,7 @@ while True:
     frame = cv.resize(frame, (width, height - sizeHeader))
 
     img_final = cv.vconcat([img_preview, frame])
+
 
     if len(posList) > 0:
         x,y = posList[0]
