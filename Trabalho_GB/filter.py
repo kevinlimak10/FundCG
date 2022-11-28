@@ -1,7 +1,6 @@
 import cv2 as cv
 import numpy as np
-from numpy import array
-
+from scipy.interpolate import UnivariateSpline
 def brilho(img, beta_value ):
     img_bright = cv.convertScaleAbs(img, beta=beta_value)
 
@@ -20,6 +19,15 @@ def sketch(image):
     sketch_image = cv.divide(gray_image, 255 - blur_image, scale=256)
     return tranformToColorImage(sketch_image)
 
+def negative(image):
+    img_neg = cv.bitwise_not(image)
+    return img_neg
+
+def lapis(image):
+    img_gray = cv.cvtColor(image, cv.COLOR_RGB2GRAY)
+    img_blur = cv.GaussianBlur(img_gray, (21, 21), 0, 0)
+    img_blend = cv.divide(img_gray, img_blur, scale=256)
+    return tranformToColorImage(img_blend)
 
 def sepia(image):
     converted_image = np.array(image)
@@ -31,6 +39,27 @@ def sepia(image):
     sepia_image = cv.cvtColor(sepia_image, cv.COLOR_BGR2RGB)
     return sepia_image
 
+def LookupTable(x, y):
+  spline = UnivariateSpline(x, y)
+  return spline(range(256))
+
+def summer(img):
+    increaseLookupTable = LookupTable([0, 64, 128, 256], [0, 80, 160, 256])
+    decreaseLookupTable = LookupTable([0, 64, 128, 256], [0, 50, 100, 256])
+    blue_channel, green_channel,red_channel  = cv.split(img)
+    red_channel = cv.LUT(red_channel, increaseLookupTable).astype(np.uint8)
+    blue_channel = cv.LUT(blue_channel, decreaseLookupTable).astype(np.uint8)
+    sum= cv.merge((blue_channel, green_channel, red_channel ))
+    return sum
+
+def winter(img):
+    increaseLookupTable = LookupTable([0, 64, 128, 256], [0, 80, 160, 256])
+    decreaseLookupTable = LookupTable([0, 64, 128, 256], [0, 50, 100, 256])
+    blue_channel, green_channel,red_channel = cv.split(img)
+    red_channel = cv.LUT(red_channel, decreaseLookupTable).astype(np.uint8)
+    blue_channel = cv.LUT(blue_channel, increaseLookupTable).astype(np.uint8)
+    win= cv.merge((blue_channel, green_channel, red_channel))
+    return win
 
 def blur(image):
     b_amount = 9
