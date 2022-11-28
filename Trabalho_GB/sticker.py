@@ -43,13 +43,17 @@ def formatSticker(background, sticker, x_offset, y_offset):
 def handleStickerIndex(index, windowStickers):
     global stickerIndex
     stickerIndex = index
-    canvas = np.zeros((200, 800, 3), np.uint8)
+    canvas = np.zeros((200, 1000, 3), np.uint8)
 
     if stickerIndex != 0:
         text = "Sticker selecionado: " + stickersList[stickerIndex].name
         cv.putText(canvas, text, (20, 20), 2, 1, (200, 255, 155))
     else:
         cv.putText(canvas, 'Nenhum sticker selecionado', (20, 20), 2, 1, (200, 255, 155))
+
+    cv.putText(canvas, 'Clique em E para ativar/desativar filtro de olhos', (20, 60), 2, 1, (200, 255, 155))
+    cv.putText(canvas, 'Clique em P para tirar uma foto', (20, 100), 2, 1, (200, 255, 155))
+    cv.putText(canvas, 'Clique em G para ativar modo de gestos', (20, 140), 2, 1, (200, 255, 155))
     cv.imshow('stickers', canvas)
 def printStickers(frame):
     for sticker in stickers:
