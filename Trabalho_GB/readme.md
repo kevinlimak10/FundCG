@@ -22,6 +22,7 @@ Esse projeto tem como base a exploração da ferramenta OpenCv e Utilização de
 - Sticker
     - Todos os sticker contidos dentro da pasta `stickers` e configurados no arquivo `stickerConfig.py`
     - Os stickers podem ser alterados pela trackbar `Sticker`
+   -  Caso o trackbar do sticker esteja em uma posição diferente de 0, ele bloqueia a seleção de filtros
 
 - Captura de tela
     + Captura de tela da imagem ao clicar a tecla `P`
@@ -38,6 +39,8 @@ Esse projeto tem como base a exploração da ferramenta OpenCv e Utilização de
     - `Coração` faça um coração com as mãos para a camera
     - arquivos de configuração `gestureSticker.py`, ``
     - o arquivo para treinamento do modelo deve ser colocado na pasta `model`
+    - site para treinar modelos: https://teachablemachine.withgoogle.com/train/image
+    - após o treinamento, clique em export model e selecione tensforflow e keras
 
 
 ## Configuração
