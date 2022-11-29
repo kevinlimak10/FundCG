@@ -137,7 +137,7 @@ while True:
     if key == ord('p'):
         now = datetime.now()
         dt_string = now.strftime("%d-%m-%Y_%H-%M-%S")
-        cv.imwrite(dt_string + '.jpg', img_final)
+        cv.imwrite(dt_string + '.jpg', frame)
     if key == ord('e'):
         toggleEyes = not toggleEyes
     if key == ord('g'):
